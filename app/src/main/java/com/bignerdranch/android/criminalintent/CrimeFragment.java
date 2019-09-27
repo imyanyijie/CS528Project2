@@ -15,6 +15,7 @@ import android.support.v4.app.FragmentManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,6 +47,7 @@ public class CrimeFragment extends Fragment {
     private CheckBox mSolvedCheckbox;
     private Button mReportButton;
     private Button mSuspectButton;
+    private Button mGalleryButton;
     private ImageButton mPhotoButton;
     private ImageView mPhotoView;
 
@@ -140,6 +142,18 @@ public class CrimeFragment extends Fragment {
         mSuspectButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 startActivityForResult(pickContact, REQUEST_CONTACT);
+            }
+        });
+
+        //todo: mark
+        mGalleryButton = (Button)v.findViewById(R.id.crime_gallery);
+        mGalleryButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Log.e("but","button clicked");
+                FragmentManager manager = getFragmentManager();
+                GalleryFragment galleryFragment = GalleryFragment
+                        .newInstance();
+                manager.beginTransaction().replace(R.id.activity_crime_pager_view_pager,galleryFragment).addToBackStack("this").commit();
             }
         });
 
