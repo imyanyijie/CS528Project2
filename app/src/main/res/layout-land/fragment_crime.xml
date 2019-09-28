@@ -52,6 +52,29 @@
             android:layout_weight="1"
             android:text="@string/crime_report_text"
             />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/view_gallery_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/view_gallery_text"
+            />
+        <CheckBox
+            android:id="@+id/face_detection"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/face_detection_label" />
     </LinearLayout>
 
 </LinearLayout>
