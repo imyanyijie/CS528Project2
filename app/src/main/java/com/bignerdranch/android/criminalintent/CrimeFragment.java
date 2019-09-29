@@ -2,11 +2,17 @@ package com.bignerdranch.android.criminalintent;
 
 import android.app.Activity;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.RectF;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -18,6 +24,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.format.DateFormat;
 import android.util.Log;
+import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +35,10 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+
+import com.google.android.gms.vision.Frame;
+import com.google.android.gms.vision.face.Face;
+import com.google.android.gms.vision.face.FaceDetector;
 
 import java.io.File;
 import java.util.Date;
@@ -45,6 +56,7 @@ public class CrimeFragment extends Fragment {
 
     private Crime mCrime;
     private File mPhotoFile;
+    private File savePhotoFile;
     private EditText mTitleField;
     private Button mDateButton;
     private CheckBox mSolvedCheckbox;
@@ -69,6 +81,7 @@ public class CrimeFragment extends Fragment {
         UUID crimeId = (UUID) getArguments().getSerializable(ARG_CRIME_ID);
         mCrime = CrimeLab.get(getActivity()).getCrime(crimeId);
         mPhotoFile = CrimeLab.get(getActivity()).getPhotoFile(mCrime);
+
     }
 
     @Override
@@ -213,6 +226,51 @@ public class CrimeFragment extends Fragment {
 
         mPhotoView = (ImageView) v.findViewById(R.id.crime_photo);
         updatePhotoView();
+
+        //////////////////////
+        CheckBox cbx = (CheckBox) v.findViewById(R.id.face_detection);
+        cbx.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton box,boolean isChecked) {
+                if (isChecked && mPhotoFile != null && mPhotoFile.exists()){
+                    Bitmap myBitmap = PictureUtils.getScaledBitmap(
+                            mPhotoFile.getPath(), getActivity());
+                    Paint myRectPaint = new Paint();
+                    myRectPaint.setStrokeWidth(35);
+                    myRectPaint.setColor(Color.RED);
+                    myRectPaint.setStyle(Paint.Style.STROKE);
+
+                    Bitmap tempBitmap = Bitmap.createBitmap(myBitmap.getWidth(), myBitmap.getHeight(), Bitmap.Config.RGB_565);
+                    Canvas tempCanvas = new Canvas(tempBitmap);
+                    tempCanvas.drawBitmap(myBitmap, 0, 0, null);
+
+                    Context context = getActivity().getApplicationContext();
+                    FaceDetector detector = new FaceDetector.Builder(context)
+                            .setTrackingEnabled(false)
+                            .setLandmarkType(FaceDetector.ALL_LANDMARKS)
+                            .build();
+
+                    Frame frame = new Frame.Builder().setBitmap(myBitmap).build();
+                    SparseArray<Face> faces = detector.detect(frame);
+
+                    for(int i=0; i<faces.size(); i++) {
+                        Face thisFace = faces.valueAt(i);
+                        float x1 = thisFace.getPosition().x;
+                        float y1 = thisFace.getPosition().y;
+                        float x2 = x1 + thisFace.getWidth();
+                        float y2 = y1 + thisFace.getHeight();
+                        tempCanvas.drawRoundRect(new RectF(x1, y1, x2, y2), 2, 2, myRectPaint);
+                    }
+                    savePhotoFile = mPhotoFile;
+                    mPhotoView.setImageDrawable(new BitmapDrawable(getResources(),tempBitmap));
+                }
+                if (!isChecked && mPhotoFile != null && mPhotoFile.exists() && savePhotoFile != null && savePhotoFile.exists()){
+                    Bitmap bitmap = PictureUtils.getScaledBitmap(
+                            savePhotoFile.getPath(), getActivity());
+                    mPhotoView.setImageBitmap(bitmap);
+                }
+            }
+        });
+        ///////////////////////////
 
         return v;
     }

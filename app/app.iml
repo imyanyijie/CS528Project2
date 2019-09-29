@@ -80,13 +80,21 @@
       <excludeFolder url="file://$MODULE_DIR$/build" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.1.0/jars" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.android.support/recyclerview-v7/22.1.0/jars" />
-      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.android.support/support-v4/22.1.0/jars" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.android.support/support-v4/23.0.0/jars" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/9.4.0/jars" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.google.android.gms/play-services-basement/9.4.0/jars" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.google.android.gms/play-services-tasks/9.4.0/jars" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.google.android.gms/play-services-vision/9.4.0/jars" />
     </content>
     <orderEntry type="jdk" jdkName="Android API 21 Platform" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" exported="" name="Gradle: com.android.support:support-annotations:22.1.0@jar" level="project" />
-    <orderEntry type="library" exported="" name="Gradle: com.android.support:support-v4:22.1.0@aar" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: com.android.support:support-annotations:23.0.0@jar" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: com.android.support:support-v4:23.0.0@aar" level="project" />
     <orderEntry type="library" exported="" name="Gradle: com.android.support:recyclerview-v7:22.1.0@aar" level="project" />
     <orderEntry type="library" exported="" name="Gradle: com.android.support:appcompat-v7:22.1.0@aar" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: com.google.android.gms:play-services-vision:9.4.0@aar" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: com.google.android.gms:play-services-base:9.4.0@aar" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: com.google.android.gms:play-services-basement:9.4.0@aar" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: com.google.android.gms:play-services-tasks:9.4.0@aar" level="project" />
   </component>
 </module>
