@@ -264,9 +264,10 @@ public class CrimeFragment extends Fragment {
                     mPhotoView.setImageDrawable(new BitmapDrawable(getResources(),tempBitmap));
                 }
                 if (!isChecked && mPhotoFile != null && mPhotoFile.exists() && savePhotoFile != null && savePhotoFile.exists()){
-                    Bitmap bitmap = PictureUtils.getScaledBitmap(
-                            savePhotoFile.getPath(), getActivity());
-                    mPhotoView.setImageBitmap(bitmap);
+                    //Bitmap bitmap = PictureUtils.getScaledBitmap(
+                    //        savePhotoFile.getPath(), getActivity());
+                    //mPhotoView.setImageBitmap(bitmap);
+                    updatePhotoView();
                 }
             }
         });
@@ -353,4 +354,5 @@ public class CrimeFragment extends Fragment {
             mPhotoView.setImageBitmap(bitmap);
         }
     }
+
 }
