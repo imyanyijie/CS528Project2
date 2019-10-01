@@ -65,7 +65,7 @@ public class CrimeFragment extends Fragment {
         super.onCreate(savedInstanceState);
         UUID crimeId = (UUID) getArguments().getSerializable(ARG_CRIME_ID);
         mCrime = CrimeLab.get(getActivity()).getCrime(crimeId);
-        mPhotoFile = CrimeLab.get(getActivity()).getPhotoFile(mCrime);
+        mPhotoFile = CrimeLab.get(getActivity()).addPhotoFile(mCrime);
     }
 
     @Override
@@ -150,10 +150,10 @@ public class CrimeFragment extends Fragment {
         mGalleryButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Log.e("but","button clicked");
-                FragmentManager manager = getFragmentManager();
-                GalleryFragment galleryFragment = GalleryFragment
-                        .newInstance();
-                manager.beginTransaction().replace(R.id.activity_crime_pager_view_pager,galleryFragment).addToBackStack("this").commit();
+                Intent intent = new Intent(getActivity(), GalleryActivity.class);
+                intent.putExtra("UUID",mCrime.getId());
+                startActivity(intent);
+
             }
         });
 
@@ -173,6 +173,28 @@ public class CrimeFragment extends Fragment {
         boolean canTakePhoto = mPhotoFile != null &&
                 captureImage.resolveActivity(packageManager) != null;
         mPhotoButton.setEnabled(canTakePhoto);
+        Log.e("check","image path is "+canTakePhoto);
+//        if (canTakePhoto) {
+//            mPhotoButton.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    Uri uri = FileProvider.getUriForFile(getActivity(),
+//                            "com.bignerdranch.android.criminalintent.provider", mPhotoFile);
+//                    captureImage.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+//
+//                    List<ResolveInfo> cameraActivities = getActivity()
+//                            .getPackageManager().queryIntentActivities(captureImage,
+//                                    PackageManager.MATCH_DEFAULT_ONLY);
+//
+//                    for (ResolveInfo activity: cameraActivities){
+//                        getActivity().grantUriPermission(activity.activityInfo.packageName,
+//                                uri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+//                    }
+//
+//                    startActivityForResult(captureImage, REQUEST_PHOTO);
+//                }
+//            });
+//        }
 
         if (canTakePhoto) {
             Uri uri = Uri.fromFile(mPhotoFile);
@@ -262,6 +284,7 @@ public class CrimeFragment extends Fragment {
     }
 
     private void updatePhotoView() {
+        mPhotoFile = CrimeLab.get(getActivity()).getPhotoFile(mCrime);
         if (mPhotoFile == null || !mPhotoFile.exists()) {
             mPhotoView.setImageDrawable(null);
         } else {
