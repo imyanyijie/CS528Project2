@@ -21,7 +21,9 @@ import com.google.android.gms.vision.face.Face;
 import com.google.android.gms.vision.face.FaceDetector;
 
 import java.io.File;
+import java.io.FilenameFilter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -84,15 +86,60 @@ public class CrimeLab {
         }
     }
 
-    public File getPhotoFile(Crime crime) {
-        File externalFilesDir = mContext
-                .getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+    public File addPhotoFile(Crime crime) {
 
-        if (externalFilesDir == null) {
+        File storage = getStorage(crime);
+        if (storage == null) {
             return null;
         }
 
-        return new File(externalFilesDir, crime.getPhotoFilename());
+        return new File(storage, crime.getPhotoFilename());
+    }
+
+    public File getStorage(Crime crime){
+        File externalFilesDir = mContext
+                .getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        if (externalFilesDir == null) {
+            return null;
+        }
+        File storage = new File(externalFilesDir, crime.getId().toString());
+        storage.mkdirs();
+        return storage;
+    }
+
+    public File getPhotoFile(Crime crime){
+        File storage = getStorage(crime);
+        if (storage == null) {
+            return null;
+        }
+        String[] photoFileName = storage.list(new FilenameFilter() {
+            public boolean accept(File dir, String name) {
+                return name.toLowerCase().endsWith(".jpg");
+            }
+        });
+
+        if (photoFileName == null || photoFileName.length == 0) {
+            return null;
+        }
+
+        return new File(storage, photoFileName[0]);
+    }
+
+    public List<String> getPhotoFileList(Crime crime){
+        File storage = getStorage(crime);
+        if (storage == null) {
+            return null;
+        }
+        String[] photoFileName = storage.list(new FilenameFilter() {
+            public boolean accept(File dir, String name) {
+                return name.toLowerCase().endsWith(".jpg");
+            }
+        });
+
+        if (photoFileName == null || photoFileName.length == 0) {
+            return null;
+        }
+        return Arrays.asList(photoFileName);
     }
 
     public void updateCrime(Crime crime) {
