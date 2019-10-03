@@ -65,7 +65,7 @@ public class CrimeFragment extends Fragment {
     private Button mGalleryButton;
     private ImageButton mPhotoButton;
     private ImageView mPhotoView;
-    private Boolean faceDetectFlag;
+    private static Boolean faceDetectFlag;
     private Boolean canTakePhoto;
 
     public static CrimeFragment newInstance(UUID crimeId) {
@@ -227,7 +227,7 @@ public class CrimeFragment extends Fragment {
             public void onCheckedChanged(CompoundButton box,boolean isChecked) {
                 Log.e("but","box checked "+isChecked);
                 faceDetectFlag = isChecked;
-                if (isChecked && mPhotoFile != null && mPhotoFile.exists()){
+                if (faceDetectFlag && mPhotoFile != null && mPhotoFile.exists()){
                     Bitmap myBitmap = PictureUtils.getScaledBitmap(
                             mPhotoFile.getPath(), getActivity());
                     Paint myRectPaint = new Paint();
@@ -259,7 +259,7 @@ public class CrimeFragment extends Fragment {
                     savePhotoFile = mPhotoFile;
                     mPhotoView.setImageDrawable(new BitmapDrawable(getResources(),tempBitmap));
                 }
-                if (!isChecked && mPhotoFile != null && mPhotoFile.exists() && savePhotoFile != null && savePhotoFile.exists()){
+                if (!faceDetectFlag && mPhotoFile != null && mPhotoFile.exists() && savePhotoFile != null && savePhotoFile.exists()){
                     updatePhotoView();
                 }
             }
@@ -309,7 +309,9 @@ public class CrimeFragment extends Fragment {
                 c.close();
             }
         } else if (requestCode == REQUEST_PHOTO) {
-            updatePhotoView();
+            if (!faceDetectFlag){
+                updatePhotoView();
+            }
         }
     }
 
