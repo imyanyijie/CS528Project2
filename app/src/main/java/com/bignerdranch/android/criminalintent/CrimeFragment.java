@@ -198,10 +198,23 @@ public class CrimeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 mPhotoFile = CrimeLab.get(getActivity()).addPhotoFile(mCrime);
+
                 if (canTakePhoto) {
-                    Uri uri = Uri.fromFile(mPhotoFile);
+                    Uri uri = FileProvider.getUriForFile(getActivity(),
+                            "com.bignerdranch.android.criminalintent.provider", mPhotoFile);
                     captureImage.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+
+
+                    List<ResolveInfo> cameraActivities = getActivity()
+                            .getPackageManager().queryIntentActivities(captureImage,
+                                    PackageManager.MATCH_DEFAULT_ONLY);
+
+                    for (ResolveInfo activity : cameraActivities) {
+                        getActivity().grantUriPermission(activity.activityInfo.packageName,
+                                uri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                    }
                 }
+
                 startActivityForResult(captureImage, REQUEST_PHOTO);
             }
         });
